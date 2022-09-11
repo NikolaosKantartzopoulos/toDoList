@@ -1,5 +1,5 @@
 {
-  "name": "webpackTailwind",
+  "name": "toDoList",
   "version": "1.0.0",
   "description": "Setup Webpack with tailwind",
   "main": "postcss.config.js",
@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/NikolaosKantartzopoulos/webpackTailwind.git"
+    "url": "git+https://github.com/NikolaosKantartzopoulos/toDoList.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/NikolaosKantartzopoulos/webpackTailwind/issues"
+    "url": "https://github.com/NikolaosKantartzopoulos/toDoList/issues"
   },
-  "homepage": "https://github.com/NikolaosKantartzopoulos/webpackTailwind#readme",
+  "homepage": "https://github.com/NikolaosKantartzopoulos/toDoList#readme",
   "devDependencies": {
     "css-loader": "^6.7.1",
     "html-webpack-plugin": "^5.5.0",
