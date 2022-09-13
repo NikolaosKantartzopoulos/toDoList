@@ -1,18 +1,35 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full">
+<html class="h-[100vh]">
 	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Empty Webpack + Tailwindcss project</title>
+		<meta charset="utf-8" />
+		<title>toDoList</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script defer src="bundle.js"></script>
 	</head>
 	<body class="flex flex-col justify-between h-full">
-		<div id="navBar" class="h-16 bg-zinc-700 w-full">
-			<img src="logoMain" />
-			<h1>asf</h1>
+		<div
+			id="navBar"
+			class="bg-zinc-800 flex flex-row flex-wrap gap-2 justify-between text-white"
+		>
+			<div id="navBarLeftPart" class="flex flex-row gap-2 m-2">
+				<img src="./images/list.png" alt="ListIcon" class="min-w-[40px]" />
+				<button class="grid items-center">myList</button>
+			</div>
+			<div
+				id="upcomingTasks"
+				class="flex flex-row flex-wrap gap-12 flex-grow items-center justify-center"
+			>
+				<button id="todayTasks">todayTasks</button>
+				<button id="thisWeekTasks">thisWeekTasks</button>
+				<button id="allProjects">
+					<a href="./projects/projects.html">allProjects</a>
+				</button>
+				<button id="newProject">newProject</button>
+			</div>
 		</div>
-		<div id="main" class="h-5/6">a</div>
-		<div id="footer" class="h-16 bg-zinc-700 w-full">s</div>
+		<div id="main" class="bg-zinc-400 h-full mb-auto"></div>
+		<div id="footer" class="bg-zinc-800 text-center text-white">
+			For the Odin Project
+		</div>
 	</body>
-	<script src="bundle.js"></script>
 </html>
