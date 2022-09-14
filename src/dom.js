@@ -1,10 +1,16 @@
 import * as project from "./project";
+import * as index from "./index";
+import editIconURL from "./images/pencil.png";
+import { Input } from "postcss";
 export const myMain = document.getElementById("main");
 export const myList = document.getElementById("myList");
 export const todayTasks = document.getElementById("todayTasks");
 export const thisWeekTasks = document.getElementById("thisWeekTasks");
 export const allProjects = document.getElementById("allProjects");
 export const newProject = document.getElementById("newProject");
+export const editIcon = new Image();
+editIcon.src = editIconURL;
+editIcon.classList.add("inline");
 
 export function renderClearMain() {
 	myMain.innerHTML = "";
@@ -32,6 +38,7 @@ export function renderExistingProject(currentProject) {
 		"text-center",
 		"text-4xl"
 	);
+	createExistingProjectHeader.appendChild(editIcon);
 	//-------------------- descriptionBox -------------------
 	let descriptionBox = document.createElement("div");
 	descriptionBox.classList.add("text-white", "bg-zinc-500", "text-lg");
@@ -103,8 +110,9 @@ export function renderExistingTask(currentTask) {
 
 export function renderNewProjectTab() {
 	renderClearMain();
+	/* #region dom setup */
 	//-------------------- Form -------------------
-	let tempForm = document.createElement("form");
+	let tempForm = document.createElement("div");
 	tempForm.classList.add(
 		"w-full",
 		"h-full",
@@ -119,12 +127,14 @@ export function renderNewProjectTab() {
 	let createNewProjectHeader = document.createElement("h1");
 	createNewProjectHeader.textContent = "Add new Project";
 	createNewProjectHeader.classList.add("text-white", "text-center", "text-xl");
+
 	//-------------------- taskTitle -------------------
 	let titleBox = document.createElement("input");
 	titleBox.type = "text";
 	titleBox.placeholder = "Title";
 	titleBox.name = "taskTitle";
 	titleBox.id = "taskTitle";
+
 	//-------------------- descriptionBox -------------------
 	let descriptionBox = document.createElement("textarea");
 	descriptionBox.setAttribute("rows", "4");
@@ -142,7 +152,14 @@ export function renderNewProjectTab() {
 	let submitNewProject = document.createElement("button");
 	submitNewProject.textContent = "Submit";
 	submitNewProject.id = "submitNewProjectButton";
-	submitNewProject.classList.add("py-2", "px-4", "bg-blue-500", "text-white");
+	submitNewProject.classList.add(
+		"py-2",
+		"px-4",
+		"bg-blue-500",
+		"text-white",
+		"opacity-50",
+		"pointer-events-none"
+	);
 	//-------------------- Render -------------------
 	tempForm.appendChild(createNewProjectHeader);
 	tempForm.appendChild(titleBox);
@@ -150,7 +167,36 @@ export function renderNewProjectTab() {
 	tempForm.appendChild(lifeBox);
 	tempForm.appendChild(submitNewProject);
 	myMain.appendChild(tempForm);
+	/* #endregion */
 	//-------------------- get form -------------------
+	titleBox.onkeyup = () => {
+		if (titleBox.value.trim() != 0) {
+			submitNewProject.classList.remove("opacity-50", "pointer-events-none");
+			submitNewProject.classList.add("opacity-100", "pointer-events-auto");
+		} else {
+			submitNewProject.classList.remove("opacity-100", "pointer-events-auto");
+			submitNewProject.classList.add("opacity-50");
+		}
+	};
+	submitNewProject.onclick = () => {
+		submitNewProject.classList.add("bg-red-500");
+		if (titleBox.value.trim() != 0) {
+			console.log(
+				`submitNewProject clicked -> titleBox.value = ${titleBox.value}`
+			);
+			let newProject = new project.Project(titleBox.value);
+			newProject.description = descriptionBox.value;
+			newProject.life = life.value;
+			console.log({ newProject });
+			index.allProjectsArray.push(newProject);
+			titleBox.value = "";
+			titleBox.placeholder = "Title";
+			descriptionBox.value = "";
+			descriptionBox.placeholder = "Description";
+			life.value = "";
+			life.placeholder = "How many days?";
+		}
+	};
 	//submitNewProject.onclick = () => {
 }
 
