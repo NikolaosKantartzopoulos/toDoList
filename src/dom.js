@@ -1,16 +1,13 @@
 import * as project from "./project";
 import * as index from "./index";
+import * as helperFunctions from "./helperFunctions";
 import editIconURL from "./images/pencil.png";
-import { Input } from "postcss";
 export const myMain = document.getElementById("main");
 export const myList = document.getElementById("myList");
 export const todayTasks = document.getElementById("todayTasks");
 export const thisWeekTasks = document.getElementById("thisWeekTasks");
 export const allProjects = document.getElementById("allProjects");
 export const newProject = document.getElementById("newProject");
-export const editIcon = new Image();
-editIcon.src = editIconURL;
-editIcon.classList.add("inline");
 
 export function renderClearMain() {
 	myMain.innerHTML = "";
@@ -18,6 +15,7 @@ export function renderClearMain() {
 
 export function renderExistingProject(currentProject) {
 	renderClearMain();
+	/* #region DOM */
 	//-------------------- Form -------------------
 	let tempProject = document.createElement("div");
 	tempProject.classList.add(
@@ -38,7 +36,11 @@ export function renderExistingProject(currentProject) {
 		"text-center",
 		"text-4xl"
 	);
-	createExistingProjectHeader.appendChild(editIcon);
+	let editExistingProjectIcon = new Image();
+	editExistingProjectIcon.src = editIconURL;
+	editExistingProjectIcon.classList.add("inline");
+	createExistingProjectHeader.appendChild(editExistingProjectIcon);
+
 	//-------------------- descriptionBox -------------------
 	let descriptionBox = document.createElement("div");
 	descriptionBox.classList.add("text-white", "bg-zinc-500", "text-lg");
@@ -63,6 +65,14 @@ export function renderExistingProject(currentProject) {
 		taskDiv.onclick = () => renderExistingTask(curTask);
 		projectsTasksList.appendChild(taskDiv);
 	});
+	/* #endregion */
+	/* #region Edit Project*/
+	editExistingProjectIcon.onclick = () => {
+		return renderNewProjectTab(currentProject);
+		console.log(`Returned with ${currentProject.title}`);
+	};
+
+	/* #endregion*/
 }
 
 export function renderExistingTask(currentTask) {
@@ -99,7 +109,6 @@ export function renderExistingTask(currentTask) {
 	let priorityBox = document.createElement("div");
 	priorityBox.classList.add("text-white", "bg-zinc-500");
 	priorityBox.textContent = currentTask.priority;
-
 	//-------------------- Render -------------------
 	tempTaskDiv.appendChild(createExistingTaskHeader);
 	tempTaskDiv.appendChild(descriptionBox);
@@ -108,7 +117,31 @@ export function renderExistingTask(currentTask) {
 	myMain.appendChild(tempTaskDiv);
 }
 
-export function renderNewProjectTab() {
+export function renderNewProjectTab(currentProject) {
+	let titlePlaceholder;
+	let descriptionPlaceholder;
+	let lifePlaceholder;
+
+	currentProject.title != ""
+		? (titlePlaceholder = currentProject.title)
+		: (titlePlaceholder = "Title..."),
+		currentProject.description != ""
+			? (descriptionPlaceholder = currentProject.description)
+			: (descriptionPlaceholder = "Description..."),
+		lifePlaceholder != ""
+			? (lifePlaceholder = currentProject.life)
+			: (lifePlaceholder = "How many days?");
+	if (titlePlaceholder.title != "Title...") {
+		index.allProjectsArray.forEach((a) => {
+			if (a.title == currentProject.title) {
+				let ind = index.allProjectsArray.indexOf(a.title);
+				console.log(
+					`Deleted from allProjectsArray => ${index.allProjectsArray} --> ${a.title}`
+				);
+				index.allProjectsArray.splice(ind - 1, 1);
+			}
+		});
+	}
 	renderClearMain();
 	/* #region dom setup */
 	//-------------------- Form -------------------
@@ -131,35 +164,38 @@ export function renderNewProjectTab() {
 	//-------------------- taskTitle -------------------
 	let titleBox = document.createElement("input");
 	titleBox.type = "text";
-	titleBox.placeholder = "Title";
+	helperFunctions.setPlaceholderValues(titlePlaceholder, "Title...", titleBox);
 	titleBox.name = "taskTitle";
 	titleBox.id = "taskTitle";
-
 	//-------------------- descriptionBox -------------------
 	let descriptionBox = document.createElement("textarea");
 	descriptionBox.setAttribute("rows", "4");
 	descriptionBox.setAttribute("cols", "50");
-	descriptionBox.placeholder = "Description...";
+	helperFunctions.setPlaceholderValues(
+		descriptionPlaceholder,
+		"Description...",
+		descriptionBox
+	);
 	descriptionBox.id = "description";
 	descriptionBox.name = "description";
 	//-------------------- lifeBox -------------------
 	let lifeBox = document.createElement("input");
 	lifeBox.type = "number";
-	lifeBox.placeholder = "How many days?";
+	helperFunctions.setPlaceholderValues(
+		lifePlaceholder,
+		"How many days?",
+		lifeBox
+	);
 	lifeBox.id = "life";
 	lifeBox.name = "life";
 	//-------------------- submitNewProject -------------------
 	let submitNewProject = document.createElement("button");
 	submitNewProject.textContent = "Submit";
 	submitNewProject.id = "submitNewProjectButton";
-	submitNewProject.classList.add(
-		"py-2",
-		"px-4",
-		"bg-blue-500",
-		"text-white",
-		"opacity-50",
-		"pointer-events-none"
-	);
+	submitNewProject.classList.add("py-2", "px-4", "bg-blue-500", "text-white");
+	if (titlePlaceholder == "Title...") {
+		submitNewProject.classList.add("opacity-50", "pointer-events-none");
+	}
 	//-------------------- Render -------------------
 	tempForm.appendChild(createNewProjectHeader);
 	tempForm.appendChild(titleBox);
@@ -169,6 +205,10 @@ export function renderNewProjectTab() {
 	myMain.appendChild(tempForm);
 	/* #endregion */
 	//-------------------- get form -------------------
+
+	//disable - enable key
+	//Delete existing project
+
 	titleBox.onkeyup = () => {
 		if (titleBox.value.trim() != 0) {
 			submitNewProject.classList.remove("opacity-50", "pointer-events-none");
@@ -178,8 +218,8 @@ export function renderNewProjectTab() {
 			submitNewProject.classList.add("opacity-50");
 		}
 	};
+	//submit
 	submitNewProject.onclick = () => {
-		submitNewProject.classList.add("bg-red-500");
 		if (titleBox.value.trim() != 0) {
 			console.log(
 				`submitNewProject clicked -> titleBox.value = ${titleBox.value}`
@@ -197,7 +237,6 @@ export function renderNewProjectTab() {
 			life.placeholder = "How many days?";
 		}
 	};
-	//submitNewProject.onclick = () => {
 }
 
 export function renderNewTask() {

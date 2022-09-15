@@ -2,6 +2,7 @@ import "./style.css";
 import * as dom from "./dom";
 import * as project from "./project";
 import * as tasks from "./tasks";
+import * as helperFunctions from "./helperFunctions";
 
 /* #region library */
 const project1 = new project.Project("project1", "Description1", 7);
@@ -52,23 +53,6 @@ project2.tasks = [task21, task22, task23];
 /* #endregion */
 
 export const allProjectsArray = [project1, project2];
-
-// function getListOfAllProjects() {
-// 	dom.renderClearMain();
-// 	allProjectsArray.forEach((prj) => {
-// 		let tempProject = document.createElement("button");
-// 		tempProject.textContent = prj.title;
-// 		tempProject.classList.add(
-// 			"p-4",
-// 			"text-white",
-// 			"border-4",
-// 			"border-double",
-// 			"border-rose-600"
-// 		);
-// 		tempProject.onclick = () => dom.renderExistingProject(prj);
-// 		dom.myMain.appendChild(tempProject);
-// 	});
-// }
 
 dom.newProject.onclick = () => {
 	dom.renderNewProjectTab();
